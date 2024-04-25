@@ -1,0 +1,29 @@
+﻿<select id="categoryDropdown">
+    <option value="">Select a category</option>
+    @foreach (var category in ViewBag.ProductCategories)
+    {
+        <option value="@category.ProductCategoryId">@category.Name</option>
+    }
+</select>
+
+<ul id="productList"></ul>
+
+@section scripts {
+    <script>
+        $('#categoryDropdown').change(function () {
+            var categoryId = $(this).val();
+            $.ajax({
+                url: '@Url.Action("GetProductsByCategory", "Products")',
+                type: 'GET',
+                data: { categoryId: categoryId },
+                success: function (data) {
+                    $('#productList').empty();
+                    $.each(data, function (index, product) {
+
+                        $('#productList').append('<li>' + product.name + '</li>');
+                    });
+                }
+            });
+        });
+    </script>
+}
